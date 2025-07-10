@@ -19,7 +19,7 @@ The Citadel Explore App implements a sophisticated matching system that analyzes
 
 ### Core Components
 
-1. **ProfileDiscoveryEngine** (`src/algorithms/ProfileDiscoveryEngine.ts`)
+1. **ProfileDiscoveryEngine** (`lib/ProfileDiscoveryEngine.ts`)
    - Main recommendation algorithm
    - Calculates compatibility scores using multiple factors
    - Learns from user interactions to improve future suggestions
@@ -29,10 +29,20 @@ The Citadel Explore App implements a sophisticated matching system that analyzes
    - Handles user interactions (like/dislike)
    - Manages recommendation state and filtering
 
-3. **User Database** (`src/data/userData.ts`)
+3. **User Database** (`lib/userData.ts`)
    - Contains 100 fake user profiles from 5 colleges
    - Diverse set of interests, degrees, and demographics
    - Realistic profile data for testing algorithm accuracy
+
+4. **UI Components** (`src/components/ui/`)
+   - ProfileCard: Individual profile display component
+   - BottomNavigation: Main app navigation
+   - FilterModal: Advanced filtering interface
+
+5. **Custom Hook** (`src/hooks/useExploreScreen.ts`)
+   - Manages explore screen state and logic
+   - Handles recommendation engine interactions
+   - Provides clean separation of concerns
 
 ### Algorithm Logic
 
@@ -143,15 +153,21 @@ To verify algorithm accuracy:
 ## File Structure
 
 ```
+lib/
+├── ProfileDiscoveryEngine.ts    # Core matching algorithm
+├── userData.ts                  # User database (100 profiles)
+├── types.ts                     # TypeScript type definitions
+└── index.ts                     # Main library exports
+
 src/
-├── algorithms/
-│   └── ProfileDiscoveryEngine.ts    # Core matching algorithm
 ├── components/
-│   └── ExploreScreen.tsx           # Main UI component
-├── data/
-│   └── userData.ts                 # User database (100 profiles)
-└── types/
-    └── index.ts                    # TypeScript type definitions
+│   ├── ExploreScreen.tsx        # Main screen component
+│   └── ui/
+│       ├── ProfileCard.tsx      # Individual profile card
+│       ├── BottomNavigation.tsx # App navigation
+│       └── FilterModal.tsx      # Filter interface
+└── hooks/
+    └── useExploreScreen.ts      # Custom hook for screen logic
 ```
 
 ## Key Functions

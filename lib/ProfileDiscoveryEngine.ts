@@ -3,7 +3,7 @@
  * Based on the Python ProfileDiscoveryEngine from the assignment
  */
 
-import { User, RecommendationScore, BehavioralModel, Filters } from '../types';
+import { User, RecommendationScore, BehavioralModel, Filters } from './types';
 
 export class ProfileDiscoveryEngine {
   private userProfiles: Map<string, User>;

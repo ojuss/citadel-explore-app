@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import ExploreScreen from './src/components/ExploreScreen';
 
-export default function App(): JSX.Element {
+export default function App() {
   return (
     <View style={styles.container}>
       <ExploreScreen />

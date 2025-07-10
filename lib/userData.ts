@@ -1,4 +1,4 @@
-import { User, UserDatabase } from '../types';
+import { User, UserDatabase } from './types';
 
 // Fake user database with 100 users from 5 colleges
 const colleges: string[] = [
