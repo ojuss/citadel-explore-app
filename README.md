@@ -2,6 +2,68 @@
 
 A React Native application built with Expo that helps college students discover and connect with potential matches using an intelligent profile discovery algorithm.
 
+## Table of Contents
+
+- [Quick Start](#quick-start)
+- [Demo Screenshots](#demo-screenshots)
+- [Overview](#overview)
+- [Features](#features)
+- [Technical Architecture](#technical-architecture)
+- [Algorithm Logic](#algorithm-logic)
+- [Database Structure](#database-structure)
+- [Installation and Setup](#installation-and-setup)
+- [Testing the Algorithm](#testing-the-algorithm)
+- [File Structure](#file-structure)
+- [Key Functions](#key-functions)
+
+## Quick Start
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- Expo CLI (`npm install -g expo-cli`)
+- Expo Go app on your mobile device (optional)
+
+### Installation & Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd citadel-explore-app
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**
+   ```bash
+   npm start
+   ```
+
+4. **Run the app**
+   - **Mobile**: Scan the QR code with Expo Go app
+   - **Web**: Press `w` in the terminal to open in web browser
+   - **iOS Simulator**: Press `i` (requires Xcode)
+   - **Android Emulator**: Press `a` (requires Android Studio)
+
+### Available Scripts
+
+- `npm start` - Start the Expo development server
+- `npm run android` - Run on Android device/emulator
+- `npm run ios` - Run on iOS device/simulator
+- `npm run web` - Run in web browser
+
+## Demo Screenshots
+
+<div align="center">
+  <img src="assets/Screenshot 2025-07-10 at 17-51-55 Explore App.png" alt="Explore App Main Screen" width="300"/>
+  <img src="assets/Screenshot 2025-07-10 at 17-52-19 Explore App.png" alt="Explore App Profile View" width="300"/>
+</div>
+
+*The app features a modern, full-screen interface with profile cards, interactive buttons, and smooth transitions.*
+
 p.s : I'm mostly a web dev guy so it was my first time building an expo app and I've many a times vibe coded my way through it. I want to give acknowledgement Claude for the great assistance and I had lots of fun implementing the app! Thanks lots for the opportunity!
 
 ## Overview
@@ -138,10 +200,13 @@ Photography, Gaming, Startups, Music, Art, Sports, Reading, Cooking, Travel, Mov
 
 ## Installation and Setup
 
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Start the development server: `npm start`
-4. Access the app via Expo Go or web browser at localhost:8081
+> **Quick Setup**: See the [Quick Start](#quick-start) section at the top of this document for detailed installation instructions.
+
+For development and testing:
+1. Follow the Quick Start guide above
+2. The app will automatically load with 100 fake user profiles
+3. You can interact with profiles using like/dislike buttons
+4. Access filtering options through the UI
 
 ## Testing the Algorithm
 
