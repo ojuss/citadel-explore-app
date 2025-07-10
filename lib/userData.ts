@@ -60,8 +60,14 @@ const bios: string[] = [
   "Minimalist lifestyle", "Adventure seeker", "Philosophy student", "Future changemaker"
 ];
 
-// Generate random user data
+// Generate random user data - memoized to avoid regeneration
+let cachedUsers: User[] | null = null;
+
 const generateUsers = (): User[] => {
+  if (cachedUsers) {
+    return cachedUsers;
+  }
+  
   const users: User[] = [];
   
   for (let i = 1; i <= 100; i++) {
@@ -105,6 +111,7 @@ const generateUsers = (): User[] => {
     users.push(user);
   }
   
+  cachedUsers = users;
   return users;
 };
 

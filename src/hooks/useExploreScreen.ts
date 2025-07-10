@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { ProfileDiscoveryEngine, userData, User, Filters, RecommendationScore } from '../../lib';
 
 export const useExploreScreen = () => {
@@ -41,7 +41,7 @@ export const useExploreScreen = () => {
     initializeApp();
   }, []);
 
-  const handleLike = (userId: string) => {
+  const handleLike = useCallback((userId: string) => {
     if (!discoveryEngine || !currentUser) return;
     
     discoveryEngine.recordInteraction(currentUser.id, userId, 'like');
@@ -54,9 +54,9 @@ export const useExploreScreen = () => {
       const newRecommendations = discoveryEngine.discoverProfiles(currentUser.id, 5, filters);
       setRecommendations(prev => [...prev, ...newRecommendations]);
     }
-  };
+  }, [discoveryEngine, currentUser, recommendations.length, filters]);
 
-  const handleDislike = (userId: string) => {
+  const handleDislike = useCallback((userId: string) => {
     if (!discoveryEngine || !currentUser) return;
     
     discoveryEngine.recordInteraction(currentUser.id, userId, 'dislike');
@@ -69,9 +69,9 @@ export const useExploreScreen = () => {
       const newRecommendations = discoveryEngine.discoverProfiles(currentUser.id, 5, filters);
       setRecommendations(prev => [...prev, ...newRecommendations]);
     }
-  };
+  }, [discoveryEngine, currentUser, recommendations.length, filters]);
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     if (!discoveryEngine || !currentUser) return;
     
     setLoading(true);
@@ -79,23 +79,24 @@ export const useExploreScreen = () => {
     setRecommendations(filteredRecommendations);
     setLoading(false);
     setShowFilters(false);
-  };
+  }, [discoveryEngine, currentUser, filters]);
 
-  const resetFilters = () => {
+  const resetFilters = useCallback(() => {
     setFilters({
       college: '',
       interests: [],
       minAge: 18,
       maxAge: 25,
     });
-  };
+  }, []);
 
-  const handleTabPress = (tab: string) => {
+  const handleTabPress = useCallback((tab: string) => {
     // Handle navigation to different tabs
     console.log('Navigate to:', tab);
-  };
+  }, []);
 
-  return {
+  // Memoize the return object to prevent unnecessary re-renders
+  const hookReturn = useMemo(() => ({
     // State
     currentUser,
     recommendations,
@@ -115,5 +116,19 @@ export const useExploreScreen = () => {
     setShowFilters,
     setFilters,
     setSearchQuery,
-  };
+  }), [
+    currentUser,
+    recommendations,
+    loading,
+    showFilters,
+    filters,
+    searchQuery,
+    handleLike,
+    handleDislike,
+    applyFilters,
+    resetFilters,
+    handleTabPress,
+  ]);
+
+  return hookReturn;
 };

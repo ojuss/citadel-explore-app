@@ -9,11 +9,23 @@ export class ProfileDiscoveryEngine {
   private userProfiles: Map<string, User>;
   private similarityCache: Map<string, number>;
   private behavioralModels: Map<string, BehavioralModel>;
+  private performanceMetrics: {
+    totalCalculations: number;
+    cacheHits: number;
+    cacheMisses: number;
+    averageResponseTime: number;
+  };
 
   constructor() {
     this.userProfiles = new Map();
     this.similarityCache = new Map();
     this.behavioralModels = new Map();
+    this.performanceMetrics = {
+      totalCalculations: 0,
+      cacheHits: 0,
+      cacheMisses: 0,
+      averageResponseTime: 0
+    };
   }
 
   addUser(user: User): void {
@@ -47,10 +59,21 @@ export class ProfileDiscoveryEngine {
   }
 
   calculateInterestCompatibility(user1: User, user2: User): number {
+    // Create cache key for this pair
+    const cacheKey = `interest-${user1.id}-${user2.id}`;
+    if (this.similarityCache.has(cacheKey)) {
+      this.performanceMetrics.cacheHits++;
+      return this.similarityCache.get(cacheKey)!;
+    }
+    
+    this.performanceMetrics.cacheMisses++;
+    this.performanceMetrics.totalCalculations++;
+    
     const interests1 = new Set(user1.interests);
     const interests2 = new Set(user2.interests);
     
     if (interests1.size === 0 || interests2.size === 0) {
+      this.similarityCache.set(cacheKey, 0.0);
       return 0.0;
     }
     
@@ -71,7 +94,9 @@ export class ProfileDiscoveryEngine {
       diversityMultiplier = 0.85; // Slight penalty for too much overlap
     }
     
-    return jaccardScore * diversityMultiplier;
+    const result = jaccardScore * diversityMultiplier;
+    this.similarityCache.set(cacheKey, result);
+    return result;
   }
 
   calculateGeographicScore(user1: User, user2: User): number {
@@ -197,29 +222,45 @@ export class ProfileDiscoveryEngine {
   }
 
   discoverProfiles(userId: string, count: number = 10, filters: Partial<Filters> = {}): RecommendationScore[] {
+    const startTime = performance.now();
+    
     const user = this.userProfiles.get(userId);
     if (!user) {
       return [];
     }
     
+    // Create cache key for this request
+    const filterKey = JSON.stringify(filters);
+    const cacheKey = `${userId}-${filterKey}-${user.likedProfiles.length}-${user.dislikedProfiles.length}`;
+    
+    // Check cache first
+    if (this.similarityCache.has(cacheKey)) {
+      this.performanceMetrics.cacheHits++;
+      const cachedResult = this.similarityCache.get(cacheKey);
+      if (cachedResult) {
+        const endTime = performance.now();
+        this.updateAverageResponseTime(endTime - startTime);
+        return JSON.parse(cachedResult.toString());
+      }
+    }
+    
+    this.performanceMetrics.cacheMisses++;
+    
     const candidates: RecommendationScore[] = [];
+    const interactedProfiles = new Set([...user.likedProfiles, ...user.dislikedProfiles]);
     
     for (const [candidateId, candidate] of this.userProfiles) {
-      // Skip self
-      if (candidateId === userId) continue;
-      
-      // Skip already interacted profiles
-      if (user.likedProfiles.includes(candidateId) || 
-          user.dislikedProfiles.includes(candidateId)) {
+      // Skip self and already interacted profiles
+      if (candidateId === userId || interactedProfiles.has(candidateId)) {
         continue;
       }
       
-      // Apply filters
+      // Apply filters early to avoid unnecessary calculations
       if (filters.college && candidate.college !== filters.college) continue;
-      if (filters.interests && !filters.interests.some(interest => 
-          candidate.interests.includes(interest))) continue;
       if (filters.minAge && candidate.age < filters.minAge) continue;
       if (filters.maxAge && candidate.age > filters.maxAge) continue;
+      if (filters.interests && filters.interests.length > 0 && 
+          !filters.interests.some(interest => candidate.interests.includes(interest))) continue;
       
       const compatibilityScore = this.calculateCompatibilityScore(user, candidate);
       
@@ -233,7 +274,26 @@ export class ProfileDiscoveryEngine {
     // Sort by compatibility score (descending)
     candidates.sort((a, b) => b.score - a.score);
     
-    return candidates.slice(0, count);
+    const result = candidates.slice(0, count);
+    
+    // Cache the result (store as string to avoid object reference issues)
+    this.similarityCache.set(cacheKey, JSON.stringify(result) as any);
+    
+    const endTime = performance.now();
+    this.updateAverageResponseTime(endTime - startTime);
+    
+    return result;
+  }
+
+  private updateAverageResponseTime(responseTime: number): void {
+    const { totalCalculations, averageResponseTime } = this.performanceMetrics;
+    this.performanceMetrics.averageResponseTime = 
+      (averageResponseTime * totalCalculations + responseTime) / (totalCalculations + 1);
+  }
+
+  // Get performance metrics
+  getPerformanceMetrics(): typeof this.performanceMetrics {
+    return { ...this.performanceMetrics };
   }
 
   getMatchReasons(user: User, candidate: User): string[] {
@@ -283,6 +343,33 @@ export class ProfileDiscoveryEngine {
     
     // Update user in map
     this.userProfiles.set(userId, user);
+    
+    // Clear cache entries for this user since their interaction history changed
+    this.clearUserCache(userId);
+  }
+
+  // Clear cache entries for a specific user
+  private clearUserCache(userId: string): void {
+    const keysToDelete: string[] = [];
+    for (const [key] of this.similarityCache) {
+      if (key.startsWith(`${userId}-`) || key.includes(`-${userId}-`)) {
+        keysToDelete.push(key);
+      }
+    }
+    keysToDelete.forEach(key => this.similarityCache.delete(key));
+  }
+
+  // Clear all cache (useful for memory management)
+  clearCache(): void {
+    this.similarityCache.clear();
+  }
+
+  // Get cache statistics
+  getCacheStats(): { size: number; keys: string[] } {
+    return {
+      size: this.similarityCache.size,
+      keys: Array.from(this.similarityCache.keys())
+    };
   }
 }
 

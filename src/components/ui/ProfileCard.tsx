@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   View,
   Text,
@@ -21,7 +21,9 @@ interface ProfileCardProps {
   onDislike: (userId: string) => void;
 }
 
-const ProfileCard: React.FC<ProfileCardProps> = ({ user, reasons, year, onLike, onDislike }) => {
+const ProfileCard: React.FC<ProfileCardProps> = memo(({ user, reasons, year, onLike, onDislike }) => {
+  const handleLike = () => onLike(user.id);
+  const handleDislike = () => onDislike(user.id);
   return (
     <View style={styles.profileCard}>
       <View style={styles.imageContainer}>
@@ -83,14 +85,14 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, reasons, year, onLike, 
         <View style={styles.actionButtons}>
           <TouchableOpacity
             style={styles.dislikeButton}
-            onPress={() => onDislike(user.id)}
+            onPress={handleDislike}
           >
             <Text style={styles.dislikeText}>Dislike</Text>
           </TouchableOpacity>
           
           <TouchableOpacity
             style={styles.likeButton}
-            onPress={() => onLike(user.id)}
+            onPress={handleLike}
           >
             <Text style={styles.likeText}>Like</Text>
           </TouchableOpacity>
@@ -98,7 +100,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, reasons, year, onLike, 
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   profileCard: {

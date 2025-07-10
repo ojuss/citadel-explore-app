@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   View,
   Text,
@@ -19,7 +19,7 @@ interface FilterModalProps {
   onReset: () => void;
 }
 
-const FilterModal: React.FC<FilterModalProps> = ({
+const FilterModal: React.FC<FilterModalProps> = memo(({
   visible,
   filters,
   onClose,
@@ -89,7 +89,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
       </View>
     </Modal>
   );
-};
+});
 
 const styles = StyleSheet.create({
   modalOverlay: {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -7,7 +7,7 @@ interface BottomNavigationProps {
   onTabPress?: (tab: string) => void;
 }
 
-const BottomNavigation: React.FC<BottomNavigationProps> = ({ activeTab = 'explore', onTabPress }) => {
+const BottomNavigation: React.FC<BottomNavigationProps> = memo(({ activeTab = 'explore', onTabPress }) => {
   const tabs = [
     { id: 'explore', label: 'Explore', icon: 'search' },
     { id: 'events', label: 'Events', icon: 'calendar' },
@@ -36,7 +36,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ activeTab = 'explor
       ))}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   bottomNavigation: {
