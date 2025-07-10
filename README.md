@@ -2,6 +2,9 @@
 
 A React Native application built with Expo that helps college students discover and connect with potential matches using an intelligent profile discovery algorithm.
 
+p.s : I'm mostly a web dev guy so it was my first time building an expo app and I've many a times vibe coded my way through it. I want to give acknowledgement Claude for the great assistance and I had lots of fun implementing the app! Thanks lots for the opportunity!
+
+
 ## Table of Contents
 
 - [Quick Start](#quick-start)
@@ -61,10 +64,6 @@ A React Native application built with Expo that helps college students discover 
   <img src="assets/Screenshot 2025-07-10 at 17-51-55 Explore App.png" alt="Explore App Main Screen" width="300"/>
   <img src="assets/Screenshot 2025-07-10 at 17-52-19 Explore App.png" alt="Explore App Profile View" width="300"/>
 </div>
-
-*The app features a modern, full-screen interface with profile cards, interactive buttons, and smooth transitions.*
-
-p.s : I'm mostly a web dev guy so it was my first time building an expo app and I've many a times vibe coded my way through it. I want to give acknowledgement Claude for the great assistance and I had lots of fun implementing the app! Thanks lots for the opportunity!
 
 ## Overview
 
