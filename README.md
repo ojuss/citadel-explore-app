@@ -2,6 +2,8 @@
 
 A React Native application built with Expo that helps college students discover and connect with potential matches using an intelligent profile discovery algorithm.
 
+p.s : I'm mostly a web dev guy so it was my first time building an expo app and I've many a times vibe coded my way through it. I want to give acknowledgement Claude for the great assistance and I had lots of fun implementing the app! Thanks lots for the opportunity!
+
 ## Overview
 
 The Citadel Explore App implements a sophisticated matching system that analyzes user profiles across multiple dimensions to suggest compatible matches. The app features a modern, full-screen interface similar to popular dating applications, with an emphasis on academic and interest-based compatibility.
