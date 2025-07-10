@@ -1,6 +1,6 @@
 # Citadel Explore App
 
-A React Native dating application built with Expo that helps college students discover and connect with potential matches using an intelligent profile discovery algorithm.
+A React Native application built with Expo that helps college students discover and connect with potential matches using an intelligent profile discovery algorithm.
 
 ## Overview
 
